@@ -23,7 +23,7 @@ primary_region = "iad"
     ARCH="amd64"
 
 [env]
-  OPENAI_MODEL="gpt-3.5" # or gpt-4 
+  OPENAI_MODEL="gpt-3.5-turbo" # or gpt-4 
   VECTOR_DATABASE="qdrant://qdrant_cloud_url" # example: qdrant://https://qdrant.cloud.io:6333
   ENV="prod"
   ARCH="amd64"
