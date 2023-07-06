@@ -1,0 +1,75 @@
+
+INGEST_GIT_REPO_URLS = [
+        # format is (repo_url, branch)
+        ('https://github.com/yourorg/yourrepo.git', 'main'),
+        ('https://github.com/yourorg/yourrepo2.git', 'main'),
+        ('https://github.com/yourorg/yourrepo3.git', 'main'),
+        ('https://github.com/yourorg/yourrepo4.git', 'main'),
+] 
+
+INGEST_SITEMAP_URLS = [
+        "https://yourwebsite.dot/sitemap.xml",
+]
+INGEST_SITEMAP_URLS_FILTERS = [
+        "https://yourwebsite.dot/pricing",
+        "https://yourwebsite.dot/static/(.*)",
+
+]
+
+INGEST_GIT_REPOS_DIR=None
+
+FAQBOT_SYSTEM_TEMPLATE='''
+- Act as a knowledge base and use the Plivo API, documentation and code resources to answer the question.
+- Always include the complete response in the answer.
+- If you don't know the answer, just say that "I don't know", don't try to make up an answer.
+- 'Webhook' keyword is synonymous to 'callback', 'API' is synonymous to 'Plivo API', 'SDK' is synonymous to 'Plivo SDK', 'XML' is synonymous to 'Plivo XML'.
+- For any coding implementation, act as software development engineer and use the Plivo SDKs to solve the problem
+- If the programming language is not specified, use Python.
+- Format the answer with markdown.
+- Analyze the following information to answer the question.
+----------------
+{summaries}
+'''
+
+#############################################
+#############################################
+####### DO NOT CHANGE BELOW THIS LINE #######
+#############################################
+#############################################
+# import variables from environment
+import os
+
+SLACK_TOKEN_ID = os.getenv('SLACK_TOKEN_ID')
+if not SLACK_TOKEN_ID:
+    raise Exception('SLACK_TOKEN_ID not set')
+
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+if not OPENAI_API_KEY:
+    raise Exception('OPENAI_API_KEY not set')
+
+OPENAI_MODEL = os.getenv('OPENAI_MODEL')
+if not OPENAI_MODEL:
+    raise Exception('OPENAI_MODEL not set')
+
+VECTOR_DATABASE = os.getenv('VECTOR_DATABASE')
+if not VECTOR_DATABASE:
+    raise Exception('VECTOR_DATABASE not set')
+
+ARCH = os.getenv('ARCH')
+if not ARCH:
+    ARCH = os.uname().machine
+if ARCH == 'x86_64':
+    ARCH = 'amd64'
+if ARCH not in ['amd64', 'arm64']:
+    raise Exception('Unsupported architecture: {}'.format(ARCH))
+
+VECTOR_DATABASE = VECTOR_DATABASE.replace('{ARCH}', ARCH)
+
+OPENAI_REQUEST_TIMEOUT = os.getenv('OPENAI_REQUEST_TIMEOUT')
+if not OPENAI_REQUEST_TIMEOUT:
+    OPENAI_REQUEST_TIMEOUT = 120
+
+FAQBOT_OPENAI_REQUEST_TIMEOUT = OPENAI_REQUEST_TIMEOUT
+FAQBOT_OPENAI_MODEL = OPENAI_MODEL
+FAQBOT_OPENAI_TEMPERATURE=0.0
+FAQBOT_OPENAI_MAX_TOKENS=2000

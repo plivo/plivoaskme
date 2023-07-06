@@ -1,0 +1,31 @@
+app = "<your-fly-app-name>"
+primary_region = "iad"
+
+[http_service]
+  internal_port = 50505
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+
+[checks]
+  [checks.alive]
+    grace_period = "10s"
+    interval = "10s"
+    method = "get"
+    path = "/status"
+    port = 50505
+    timeout = "5s"
+    type = "http"
+
+[build]
+  dockerfile = "Dockerfile"
+  [build.args]
+    ARCH="amd64"
+
+[env]
+  OPENAI_MODEL="gpt-3.5" # or gpt-4 
+  VECTOR_DATABASE="qdrant://qdrant_cloud_url" # example: qdrant://https://qdrant.cloud.io:6333
+  ENV="prod"
+  ARCH="amd64"
+  OPENAI_REQUEST_TIMEOUT="180"
+
